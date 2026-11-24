@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AA-5 Weight &amp; Balance</title>
+<meta name="description" content="Weight and balance calculator for a Grumman American AA-5 Traveler, built from Dan's spreadsheet. Works offline.">
+<meta name="theme-color" content="#0f2a47">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AA-5 W&amp;B">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="notch" aria-hidden="true"></div>
+<header class="top">
+  <h1>AA-5 Weight &amp; Balance</h1>
+  <p class="sub">Grumman American AA-5 Traveler · O-320</p>
+</header>
+
+<div id="mini" class="mini ok" aria-hidden="true"><span id="mini-word">WITHIN LIMITS</span><span id="mini-nums"></span></div>
+
+<main class="layout">
+ <div class="col col-left">
+  <section class="inputs card" aria-labelledby="load-h">
+    <div class="card-head">
+      <h2 id="load-h">Load</h2>
+      <button type="button" id="reset" class="btn ghost">Reset</button>
+    </div>
+    <div class="field">
+      <label for="in-fuelGal">Fuel <span class="hint">gallons · max 37 · 6 lb/gal</span></label>
+      <div class="inrow"><input id="in-fuelGal" data-key="fuelGal" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="unit">gal</span></div>
+      <p class="limit" id="lim-fuelGal" role="alert" hidden></p>
+      <p class="derived" id="d-fuel"></p>
+    </div>
+    <div class="field">
+      <label for="in-oilQt">Oil <span class="hint">quarts on board · max 8 · 1.875 lb/qt (empty weight excludes oil)</span></label>
+      <div class="inrow"><input id="in-oilQt" data-key="oilQt" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="unit">qt</span></div>
+      <p class="limit" id="lim-oilQt" role="alert" hidden></p>
+      <p class="derived" id="d-oil"></p>
+    </div>
+    <div class="field">
+      <label for="in-front">Pilot &amp; Co-Pilot <span class="hint">combined</span></label>
+      <div class="inrow"><input id="in-front" data-key="front" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="unit">lb</span></div>
+      <p class="derived" id="d-front"></p>
+    </div>
+    <div class="field">
+      <label for="in-rear">Rear Seat Passengers</label>
+      <div class="inrow"><input id="in-rear" data-key="rear" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="unit">lb</span></div>
+      <p class="derived" id="d-rear"></p>
+    </div>
+    <div class="field">
+      <label for="in-baggage">Baggage <span class="hint">max 120 lb · or cargo area, not both</span></label>
+      <div class="inrow"><input id="in-baggage" data-key="baggage" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next"><span class="unit">lb</span></div>
+      <p class="limit" id="x-baggage" role="status" hidden></p>
+      <p class="derived" id="d-baggage"></p>
+    </div>
+    <div class="field">
+      <label for="in-cargo">Cargo Area <span class="hint">max 340 lb · or baggage, not both</span></label>
+      <div class="inrow"><input id="in-cargo" data-key="cargo" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done"><span class="unit">lb</span></div>
+      <p class="limit" id="x-cargo" role="status" hidden></p>
+      <p class="derived" id="d-cargo"></p>
+    </div>
+  </section>
+  <section class="settings card" aria-labelledby="settings-h">
+    <details id="settings-details">
+      <summary><h2 id="settings-h">Aircraft settings</h2><span class="hint">empty weight &amp; arm</span></summary>
+      <p class="note">Change these after a new weighing or equipment change. Editing weight or arm recalculates the moment.</p>
+      <div class="field">
+        <label for="set-emptyWeight">Licensed empty weight</label>
+        <div class="inrow"><input id="set-emptyWeight" data-set="emptyWeight" type="text" inputmode="decimal" autocomplete="off"><span class="unit">lb</span></div>
+      </div>
+      <div class="field">
+        <label for="set-emptyArm">Empty weight arm</label>
+        <div class="inrow"><input id="set-emptyArm" data-set="emptyArm" type="text" inputmode="decimal" autocomplete="off"><span class="unit">in</span></div>
+      </div>
+      <div class="field">
+        <label for="set-emptyMoment">Empty moment / 1000</label>
+        <div class="inrow"><input id="set-emptyMoment" data-set="emptyMoment" type="text" inputmode="decimal" autocomplete="off"><span class="unit">lb-in</span></div>
+      </div>
+      <button type="button" id="reset-settings" class="btn ghost">Restore spreadsheet values</button>
+    </details>
+  </section>
+ </div>
+ <div class="col col-right">
+  <section class="results" aria-labelledby="results-h">
+    <h2 id="results-h" class="sr-only">Results</h2>
+    <div id="status" class="status ok" role="status">
+      <span id="status-word">WITHIN LIMITS</span>
+      <span id="status-why" class="why"></span>
+    </div>
+    <dl class="totals">
+      <div class="tot"><dt>Total weight</dt><dd><span id="out-weight">0</span> <small>lb</small></dd></div>
+      <div class="tot"><dt>CG</dt><dd><span id="out-cg">0</span> <small>in</small></dd></div>
+      <div class="tot"><dt>Moment / 1000</dt><dd id="out-moment">0</dd></div>
+      <div class="tot"><dt>Remaining load</dt><dd><span id="out-remaining">0</span> <small>lb</small></dd></div>
+    </dl>
+    <p class="cgrange" id="out-cgrange"></p>
+  </section>
+  <section class="chart card" aria-labelledby="chart-h">
+    <h2 id="chart-h">CG envelope</h2>
+    <div id="chart" class="chartbox" role="img" aria-label="CG envelope chart"></div>
+    <p class="note">Weight vs. moment/1000, drawn from the envelope table in your spreadsheet. Dot = this load.</p>
+  </section>
+  <section class="table card" aria-labelledby="table-h">
+    <h2 id="table-h">Loading table</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Weight</th><th scope="col">Arm</th><th scope="col">Mom/1000</th></tr></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot><tr><th scope="row">Total</th><td id="t-weight"></td><td id="t-cg"></td><td id="t-moment"></td></tr></tfoot>
+      </table>
+    </div>
+  </section>
+ </div>
+</main>
+
+<footer class="foot">
+  <p>Built from “Weight and Balance 1-16-88”. Arms: oil 32.0, fuel 90.9, front seats 90.6, rear seat 126.0, cargo area 116.4, baggage 148.0. Max gross 2,200 lb. Always confirm against your POH.</p>
+  <p id="offline-state" class="small"></p>
+</footer>
+
+<script src="calc.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
