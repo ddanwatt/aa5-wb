@@ -1,0 +1,119 @@
+:root{
+  --bg:#eef2f6; --card:#ffffff; --ink:#0d1b2a; --muted:#4a5b6e; --line:#c9d3de;
+  --navy:#0f2a47; --accent:#1d5fa8; --ok:#0b7a3b; --okbg:#d9f3e2; --bad:#b3121b; --badbg:#fde0e0;
+  --env:#cfe2f7; --envline:#1d5fa8;
+  font-size:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b1420; --card:#13202f; --ink:#eef3f8; --muted:#a8b6c6; --line:#2a3b50;
+    --navy:#09182a; --accent:#6fb0ff; --ok:#3ddc7e; --okbg:#0f3a24; --bad:#ff6b6b; --badbg:#4a1416;
+    --env:#1d3a5c; --envline:#6fb0ff; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;touch-action:manipulation}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.35;
+  padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.top{background:var(--navy);color:#fff;padding:calc(env(safe-area-inset-top) + 14px) 18px 14px}
+.top h1{margin:0;font-size:1.45rem;letter-spacing:.01em}
+.top .sub{margin:2px 0 0;color:#b9cbe0;font-size:.9rem}
+.layout{display:grid;gap:14px;padding:14px;max-width:1300px;margin:0 auto;grid-template-columns:minmax(0,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.card h2{margin:0 0 10px;font-size:1.15rem}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card-head h2{margin:0}
+
+.results{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+.status{border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:2px;border:2px solid}
+.status #status-word{font-size:1.6rem;font-weight:800;letter-spacing:.03em}
+.status .why{font-size:.95rem;font-weight:600}
+.status.ok{background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.status.bad{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.totals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 0}
+.tot{background:var(--bg);border-radius:10px;padding:8px 10px;min-width:0}
+.tot dt{font-size:.8rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tot dd{margin:2px 0 0;font-size:1.6rem;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tot dd small{font-size:.9rem;font-weight:600;color:var(--muted)}
+.tot dd .neg, .neg{color:var(--bad)}
+.cgrange{margin:8px 2px 0;font-size:.95rem;color:var(--muted);font-weight:600}
+
+.field{margin:0 0 14px}
+.field label{display:block;font-weight:700;font-size:1.05rem;margin-bottom:4px}
+.hint{font-weight:500;color:var(--muted);font-size:.85rem;margin-left:4px}
+.inrow{display:flex;align-items:center;gap:10px}
+.inrow input{flex:1;min-width:0;font-size:1.7rem;font-weight:700;padding:12px 14px;min-height:60px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none}
+.inrow input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(29,95,168,.25)}
+.inrow input.over{border-color:var(--bad);background:var(--badbg)}
+.unit{width:3.2em;color:var(--muted);font-weight:700}
+.limit{margin:4px 2px 0;color:var(--bad);font-size:.85rem;font-weight:600}
+.limit[hidden]{display:none}
+.derived{margin:4px 2px 0;color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+
+.btn{font:inherit;font-weight:700;font-size:1rem;min-height:48px;padding:10px 18px;border-radius:12px;border:2px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn:active{transform:translateY(1px)}
+
+.chartbox{width:100%}
+.chartbox svg{display:block;width:100%;height:auto}
+.grid line{stroke:var(--line);stroke-width:1}
+.tick{fill:var(--muted);font-size:14px}
+.axis{fill:var(--muted);font-size:15px;font-weight:700}
+.env{fill:var(--env);stroke:var(--envline);stroke-width:2.5}
+.gross{stroke:var(--bad);stroke-width:1.5;stroke-dasharray:6 5}
+.grosslbl{fill:var(--bad);font-size:13px;font-weight:700}
+.pt{stroke:#fff;stroke-width:3}
+.pt.ok{fill:var(--ok)} .pt.bad{fill:var(--bad)}
+.ptlbl{fill:var(--ink);font-size:16px;font-weight:800;paint-order:stroke;stroke:var(--card);stroke-width:5px}
+.note{color:var(--muted);font-size:.85rem;margin:8px 0 0}
+
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.95rem}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+thead th{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.03em}
+th[scope=row],thead th:first-child{text-align:left;font-weight:600}
+tfoot th,tfoot td{font-weight:800;border-bottom:none;border-top:2px solid var(--ink)}
+
+details summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:8px;min-height:44px}
+details summary::-webkit-details-marker{display:none}
+details summary h2{margin:0;display:inline}
+details summary::before{content:"▸";font-size:1.1rem;color:var(--accent)}
+details[open] summary::before{content:"▾"}
+details[open] summary{margin-bottom:8px}
+
+.foot{max-width:1300px;margin:0 auto;padding:4px 18px 28px;color:var(--muted);font-size:.8rem}
+.foot .small{margin-top:4px}
+
+
+/* Phone layout: one column — results, load, chart, table, settings */
+.col{display:contents}
+.results{order:1} .inputs{order:2} .chart{order:3} .table{order:4} .settings{order:5}
+
+/* Compact status bar that stays on screen while typing on a phone */
+.mini{position:sticky;top:env(safe-area-inset-top);z-index:10;display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:10px 16px;font-weight:800;font-size:1.05rem;font-variant-numeric:tabular-nums;border-bottom:2px solid}
+.mini.ok{background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.mini.bad{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+#mini-nums{color:var(--ink);font-weight:700;white-space:nowrap}
+.inrow input{scroll-margin-top:90px;scroll-margin-bottom:40px}
+
+/* iPad (either way) and phone landscape: load on the left, results on the right */
+@media (min-width: 760px){
+  .layout{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:start}
+  .col{display:flex;flex-direction:column;gap:14px;min-width:0}
+  .mini{display:none}
+}
+@media (min-width: 1100px){ .totals{grid-template-columns:repeat(4,minmax(0,1fr))} .tot dd{font-size:1.6rem} }
+/* Short landscape screens (phones on their side): the right column scrolls with the page */
+@media (max-height: 560px){
+  .top{padding-top:10px;padding-bottom:10px}
+  .top .sub{display:none}
+}
+@media (max-width: 380px){ .tot dd{font-size:1.35rem} .status #status-word{font-size:1.35rem} .mini{font-size:.95rem} }
+
+/* Two-tap confirm buttons (no pop-ups) */
+.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.btn.armed{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.done{background:var(--ok);border-color:var(--ok);color:#fff}
+/* Home-screen app: keep the clock area solid when the status strip is stuck under it (taps pass through) */
+.notch{position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--navy);z-index:11;pointer-events:none}
+
